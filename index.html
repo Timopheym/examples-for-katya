@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title> Some title </title>
+        <meta charset="utf8" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="./jquery.autocomplete.js"></script>
+    </head>
+    <body>
+        Введи цвет:
+        <input type="text" id="color-input"/>
+        <input type="button" id="next" value=">"/>
+        <script>
+            var colors_list = ['Красный', 'Зеленый', 'Желтый', 'Оранжевый'];
+            var colors_pool = [
+                'red',
+                'green',
+                'blue',
+                'yellow'
+            ];
+            var current_color_index = 0;
+            function setBGColor(index, cls) {
+                $('body').css('background-color', cls[index]);
+            }
+            setBGColor(current_color_index, colors_pool);
+            var colors = colors_list.map(function(color, index){
+                return {
+                    value: color,
+                    data: index
+                };
+            });            
+
+            $('#color-input').autocomplete({
+                lookup: colors,
+                lookupFilter: function(suggestion, query, queryLowerCase) {
+                    return (suggestion.value.toUpperCase().indexOf(query.toUpperCase()) === 0)
+                },
+                onSelect: function (suggestion) {
+                    alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+                }
+            });
+            // Нажатие дальше
+            $('#next').on('click', function () {
+                if (current_color_index > colors_pool.length - 2) {
+                    alert('Все кончалось!');
+                } else {
+                    current_color_index = current_color_index + 1;
+                    setBGColor(current_color_index, colors_pool);
+                }
+                
+            })
+        </script>
+        <script>
+            // Работа с базой данных
+            users = [{name: "katya"}, {name: "tima"}, {name: "goblin"}, {name: "Таня"}]
+            localStorage.setItem('users', JSON.stringify(users))
+            console.log('users =>', localStorage.getItem('users'))
+        </script>
+    </body>
+</html>
